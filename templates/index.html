@@ -4,22 +4,81 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Simulador de Rota</title>
-    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+<body>
+    <h1>Simulação de Rotas com Postos de Recarga</h1>
+    <form method="post">
+        <!-- Seleção da marca e modelo do veículo -->
+        <label>Marca do Veículo :</label>
+        <select id="marca" name="marca" onchange="atualizarModelos()">
+            <option value="">Selecione a marca</option>
+            {% for marca in carros %}
+                <option value="{{ marca }}">{{ marca }}</option>
+            {% endfor %}
+        </select><br>
+        
+        <label>Modelo do Veículo :</label>
+        <select id="modelo" name="modelo" onchange="atualizarAutonomiaEConsumo()">  
+            <option value="">Selecione o modelo</option>
+        </select><br>
+        
+        <!-- Campo de autonomia preenchido automaticamente -->
+        <label>Autonomia do Veículo (km):</label>
+        <input type="text" name="autonomia"><br>
+        
+        <!-- Campo de consumo preenchido automaticamente -->
+        <label>Consumo por km (kWh):</label>
+        <input type="text" name="consumo"><br>
+        
+        <!-- Campo de capacidade da bateria preenchido automaticamente -->
+        <label>Capacidade da Bateria (kWh):</label>
+        <input type="text" name="capacidade"><br>
+        
+        <!-- Outros campos do formulário -->
+        <label>Condição de Tráfego:</label>
+        <select name="trafego">
+            <option value="normal">Normal</option>
+            <option value="moderado">Moderado</option>
+            <option value="intenso">Intenso</option>
+            <option value="congestionado">Congestionado</option>
+        </select><br>
+        
+        <button type="submit">Simular Rota</button>
+    </form>
+
+    {% if pontos_recarga %}
+        <h2>Paradas de Recarga:</h2>
+        <ul>
+            {% for ponto in pontos_recarga %}
+                <li>{{ ponto }}</li>
+            {% endfor %}
+        </ul>
+        <p>Tempo Total de Recarga: {{ tempo_total }} horas</p>
+        <iframe src="{{ url_for('static', filename=mapa) }}" width="100%" height="500"></iframe>
+    {% endif %}
+    
+    <hr>
+    <button><a href="{{ url_for('relatorio') }}" target="_blank">Ver Relatório de Lacunas e Melhorias</a></button>
+<br>
+    <button><a href="{{ url_for('adicionar_posto') }}" target="_blank" >Adicionar Novo Posto de Recarga</a></button>
+    <script id="carros-data" type="application/json">
+        {{ carros|tojson|safe }}
+    </script>
     <script>
-    // Dados carregados pelo Flask (já convertidos para JS)
-    const carros = {{ carros|tojson|safe }};
+    const carros = JSON.parse(document.getElementById("carros-data").textContent);
     const dadosVeiculos = {};
 
-    // Preenche dadosVeiculos para acesso rápido
-    for (const marca in carros) {
-        carros[marca].forEach(carro => {
-            dadosVeiculos[carro.modelo] = {
-                autonomia: carro.autonomia,
-                consumo: carro.consumo,
-                capacidade: carro.capacidade
-            };
-        });
-    }
+  for (const marca in carros) {
+      carros[marca].forEach(carro => {
+          dadosVeiculos[carro.modelo] = {
+              autonomia: carro.autonomia,
+              consumo: carro.consumo,
+              capacidade: carro.capacidade
+          };
+      });
+  }
+
 
     function atualizarModelos() {
         const marcaSelecionada = document.getElementById('marca').value;
@@ -50,62 +109,5 @@
         }
     }
     </script>
-</head>
-<body>
-    <h1>Simulação de Rotas com Postos de Recarga</h1>
-    <form method="post">
-        <!-- Seleção da marca e modelo do veículo -->
-        <label>Marca do Veículo :</label>
-        <select id="marca" onchange="atualizarModelos()">
-            <option value="">Selecione a marca</option>
-            {% for marca in carros %}
-                <option value="{{ marca }}">{{ marca }}</option>
-            {% endfor %}
-        </select><br>
-        
-        <label>Modelo do Veículo :</label>
-        <select id="modelo" onchange="atualizarAutonomiaEConsumo()">
-            <option value="">Selecione o modelo</option>
-        </select><br>
-        
-        <!-- Campo de autonomia preenchido automaticamente -->
-        <label>Autonomia do Veículo (km):</label>
-        <input type="text" name="autonomia" readonly><br>
-        
-        <!-- Campo de consumo preenchido automaticamente -->
-        <label>Consumo por km (kWh):</label>
-        <input type="text" name="consumo" readonly><br>
-        
-        <!-- Campo de capacidade da bateria preenchido automaticamente -->
-        <label>Capacidade da Bateria (kWh):</label>
-        <input type="text" name="capacidade" readonly><br>
-        
-        <!-- Outros campos do formulário -->
-        <label>Condição de Tráfego:</label>
-        <select name="trafego">
-            <option value="normal">Normal</option>
-            <option value="moderado">Moderado</option>
-            <option value="intenso">Intenso</option>
-            <option value="congestionado">Congestionado</option>
-        </select><br>
-        
-        <button type="submit">Simular Rota</button>
-    </form>
-
-    {% if pontos_recarga %}
-        <h2>Paradas de Recarga:</h2>
-        <ul>
-            {% for ponto in pontos_recarga %}
-                <li>{{ ponto }}</li>
-            {% endfor %}
-        </ul>
-        <p>Tempo Total de Recarga: {{ tempo_total }} horas</p>
-        <iframe src="{{ url_for('static', filename=mapa) }}" width="100%" height="500"></iframe>
-    {% endif %}
-    
-    <hr>
-    <button><a href="relatorio.html">Ver Relatório de Lacunas e Melhorias</a></button>
-<br>
-    <button><a href="adicionar_posto.html">Adcionar Novo Posto de Recarga</a></button>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Adicionar Posto</title>
@@ -10,27 +10,26 @@
     <form method="post">
         <h1>Adicionar Posto de Recarga</h1>
         <label>Nome do Posto:</label>
-        <input type="text" name="nome" readonly><br>
+        <input type="text" name="nome"><br>
         
         <label>Localização:</label>
-        <input type="text" name="localização" readonly><br>
+        <input type="text" name="localização"><br>
         
         <label>Km:</label>
-        <input type="text" name="km" readonly><br>
+        <input type="text" name="km"><br>
 
         <label>Latitude:</label>
-        <input type="text" name="lat" readonly><br>
+        <input type="text" name="lat"><br>
 
         <label>Longitude:</label>
-        <input type="text" name="lon" readonly><br>
+        <input type="text" name="lon"><br>
 
         <label>Total por Tipo:</label>
-        <input type="text" name="total" readonly><br>
+        <input type="text" name="total"><br>
 
         <button type="submit">Adicionar Posto</button>
     </form>
     <br>
-    <br>
-    <div class="voltar"><a href="index.html"><button>Voltar</button></a></div>
+    <div class="voltar"><a href="{{ url_for('index') }}"><button>Voltar</button></a></div>
 </body>
 </html>

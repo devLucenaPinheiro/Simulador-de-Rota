@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <link rel="stylesheet" href="../styles/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Relatório de Análise</title>
@@ -30,6 +30,6 @@
             Capacidade Atual: {{ melhoria.total_por_tipo }} carregadores
         </p>
 
-        <a href="index.html" class="btn-link">Voltar</a>
+        <div class="voltar"><a href="{{ url_for('index') }}"><button>Voltar</button></a></div>
 </body>
 </html>
