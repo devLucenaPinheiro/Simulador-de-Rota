@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-    <meta charset="UTF-8">
-    <title>Simulador de Rota de Veículo Elétrico</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Rota</title>
+    <link rel="stylesheet" href="../styles/style.css">
     <script>
     // Dados carregados pelo Flask (já convertidos para JS)
     const carros = {{ carros|tojson|safe }};
@@ -102,8 +104,8 @@
     {% endif %}
     
     <hr>
-<a href="{{ url_for('relatorio') }}">Ver Relatório de Lacunas e Melhorias</a> 
+<a href="relatorio.html">Ver Relatório de Lacunas e Melhorias</a> 
 <br>
-<a href="{{ url_for('adicionar_posto') }}">Adcionar Novo Posto de Recarga</a>
+<a href="adicionar_posto.html">Adcionar Novo Posto de Recarga</a>
 </body>
 </html>
